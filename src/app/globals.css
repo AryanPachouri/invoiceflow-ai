@@ -1,26 +1,111 @@
 @import "tailwindcss";
 
+/* `dark:` utilities follow the .dark class on <html> (set before first paint, see layout.tsx). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Semantic surface tokens (themed below) */
+  --color-surface: #ffffff;   /* cards, inputs, dialogs, tables */
+  --color-page: #f7f8fa;      /* app background */
+  --color-code: #0f172a;      /* log / JSON blocks: dark in both themes */
+  --color-code-fg: #e2e8f0;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/*
+ * Dark theme. Tailwind v4 compiles every color utility to a CSS variable, so the whole UI is
+ * themed here by remapping the palette rather than sprinkling `dark:` variants:
+ *  - slate is inverted (text-slate-900 becomes light text, border-slate-200 a subtle dark border)
+ *  - tint shades (50–200) of the status/accent hues become deep translucent tints
+ *  - text shades (600–800) become lighter for contrast on dark surfaces
+ * Status hues (emerald/amber/red) and the blue accent keep their identity.
+ */
+.dark {
+  color-scheme: dark;
+  --color-page: #0b1120;
+  --color-surface: #111a2e;
+  --color-code: #070c18;
+  --color-code-fg: #dbe3ef;
+
+  --color-slate-50: #16213a;
+  --color-slate-100: #1d2944;
+  --color-slate-200: #273451;
+  --color-slate-300: #3a4867;
+  --color-slate-400: #7d8aa5;
+  --color-slate-500: #98a5bc;
+  --color-slate-600: #b0bccf;
+  --color-slate-700: #cfd8e5;
+  --color-slate-800: #e3e9f2;
+  --color-slate-900: #f1f5f9;
+  --color-slate-950: #f8fafc;
+
+  --color-blue-50: #14244a;
+  --color-blue-100: #1a2f60;
+  --color-blue-200: #243f7c;
+  --color-blue-500: #4f8ef7;
+  --color-blue-600: #3b7cf4;
+  --color-blue-700: #7aaefc;
+  --color-blue-800: #a6c8fd;
+
+  --color-emerald-50: #0e2a22;
+  --color-emerald-100: #12372b;
+  --color-emerald-200: #1b4c3b;
+  --color-emerald-600: #2fc48e;
+  --color-emerald-700: #4fd8a5;
+  --color-emerald-800: #86e7c2;
+
+  --color-amber-50: #2c210b;
+  --color-amber-100: #3a2c0f;
+  --color-amber-200: #5a4314;
+  --color-amber-600: #f5a524;
+  --color-amber-700: #fbbf3c;
+  --color-amber-800: #fcd56b;
+
+  --color-red-50: #2e1418;
+  --color-red-100: #3d1a20;
+  --color-red-200: #5b232b;
+  --color-red-600: #f47272;
+  --color-red-700: #f99a9a;
+  --color-red-800: #fcc1c1;
+
+  --color-violet-50: #241a45;
+  --color-violet-700: #c4b5fd;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--color-page);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-page);
+  color: var(--color-slate-900);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Smooth theme switch without animating layout */
+html.theme-transition,
+html.theme-transition * {
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease !important;
+}
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(59, 124, 244, 0.45); }
+  70% { box-shadow: 0 0 0 8px rgba(59, 124, 244, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 124, 244, 0); }
+}
+.pulse-ring { animation: pulse-ring 1.4s infinite; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.toast-in { animation: toast-in 160ms ease-out; }

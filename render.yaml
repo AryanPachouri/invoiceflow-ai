@@ -1,0 +1,29 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: invoiceflow-ai
+    runtime: docker
+    plan: starter            # OCR needs ~512 MB+ RAM; the free plan also sleeps when idle
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL          # Supabase → Project Settings → Database → Connection string (Session pooler, port 5432)
+        sync: false
+      - key: SUPABASE_URL          # https://<project-ref>.supabase.co
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY   # server-side only; never exposed to the browser
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: invoices
+      - key: ANTHROPIC_API_KEY     # optional — leave unset for deterministic-only extraction
+        sync: false
+      - key: RESEND_API_KEY        # optional — enables "Send Email"
+        sync: false
+      - key: EMAIL_FROM            # e.g. "Accounts Payable <ap@yourdomain.com>" (verified Resend domain)
+        sync: false
+      - key: COMPANY_NAME
+        value: Contoso Manufacturing Corp.
+      - key: MAX_UPLOAD_MB
+        value: "10"
+      - key: PIPELINE_STAGE_DELAY_MS
+        value: "400"

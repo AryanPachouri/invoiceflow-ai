@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+!.env.example
+
+# local data (PGlite database, uploaded files)
+/.data/
+/scratch/
+
+# demo recording (large binary, shared separately)
+/demo_submission/*.mp4
+
+# local tool config
+/.claude/

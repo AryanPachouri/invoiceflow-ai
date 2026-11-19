@@ -1,0 +1,65 @@
+[
+  {
+    "file": "01-apex-happy-path.pdf",
+    "title": "Happy path — Apex Industrial",
+    "scenario": "Clean text PDF, explicit PO, amounts within PO balance.",
+    "expected": "APPROVED",
+    "scanned": false
+  },
+  {
+    "file": "02-nordic-scanned-ocr.pdf",
+    "title": "Scanned invoice (OCR) — Nordic Freight",
+    "scenario": "Image-only scanned PDF in EUR. No text layer, so OCR is required.",
+    "expected": "APPROVED",
+    "scanned": true
+  },
+  {
+    "file": "03-apex-duplicate.pdf",
+    "title": "Edge case 1 — Duplicate invoice",
+    "scenario": "Vendor re-sent invoice INV-APX-2026-0398, which was already processed and approved.",
+    "expected": "REJECTED",
+    "scanned": false
+  },
+  {
+    "file": "04-summit-amount-mismatch.pdf",
+    "title": "Edge case 2 — Amount exceeds PO balance",
+    "scenario": "PO has $4,500 remaining; invoice bills $5,750 (an unplanned emergency repair was added).",
+    "expected": "NEEDS_REVIEW",
+    "scanned": false
+  },
+  {
+    "file": "05-brightline-missing-po.pdf",
+    "title": "Edge case 3 — Missing PO reference",
+    "scenario": "No PO on the invoice and a bundled line item. The vendor has two open POs that could both fit.",
+    "expected": "NEEDS_REVIEW",
+    "scanned": false
+  },
+  {
+    "file": "06-orion-missing-fields.pdf",
+    "title": "Edge case 4 — Missing invoice number & date",
+    "scenario": "Invoice is missing its invoice number and issue date.",
+    "expected": "NEEDS_REVIEW",
+    "scanned": false
+  },
+  {
+    "file": "07-meridian-inactive-vendor.pdf",
+    "title": "Inactive vendor — Meridian Print",
+    "scenario": "Vendor was deactivated in the vendor master file.",
+    "expected": "REJECTED",
+    "scanned": false
+  },
+  {
+    "file": "08-brightline-tax-error.pdf",
+    "title": "Incorrect tax calculation",
+    "scenario": "Tax stated as 8% but the tax amount doesn't match the subtotal.",
+    "expected": "NEEDS_REVIEW",
+    "scanned": false
+  },
+  {
+    "file": "09-brightline-partial-invoice.pdf",
+    "title": "Partial invoice against an annual PO",
+    "scenario": "Monthly invoice against a 12-month PO. The cumulative invoiced amount is tracked.",
+    "expected": "APPROVED",
+    "scanned": false
+  }
+]
